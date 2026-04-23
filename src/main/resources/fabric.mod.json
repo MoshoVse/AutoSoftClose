@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "softclose",
+  "version": "${version}",
+  "name": "AutoSoftClose",
+  "description": "Automatic SoftClose Dupe Mod",
+  "authors": ["Claude,Gemini,ChatGPT,DeepSeek"],
+  "contact": {},
+  "license": "OPENCODE",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.softclose.SoftCloseMod"
+    ],
+    "modmenu": [
+      "com.softclose.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "softclose.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.4",
+    "cloth-config2": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
