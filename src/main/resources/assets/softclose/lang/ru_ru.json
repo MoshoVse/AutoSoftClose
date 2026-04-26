@@ -1,16 +1,24 @@
 {
+  "key.softclose.open_config": "Открыть настройки SoftClose",
   "key.softclose.start": "Запустить цикл SoftClose",
   "key.softclose.stop": "Остановить цикл SoftClose",
   "key.softclose.select_block": "Выбрать целевой блок",
   "key.softclose.toggle_block_mode": "Переключить режим клика по блоку",
   "category.softclose": "SoftClose",
-
   "softclose.config.title": "Настройки SoftClose",
   "softclose.config.category.general": "Основные",
   "softclose.config.category.commands": "Команды",
+  "softclose.config.category.keybinds": "Горячие клавиши",
+  "softclose.config.keybinds.hint": "§eВведите название клавиши, например F7, END, G, KP_1. Все горячие клавиши требуют удержания Alt (кроме Стоп).",
+  "softclose.config.keybind.start": "Клавиша запуска цикла",
+  "softclose.config.keybind.start.tooltip": "Клавиша, нажимаемая вместе с Alt для запуска цикла. По умолчанию: F7 (Alt+F7).",
+  "softclose.config.keybind.stop": "Клавиша остановки цикла",
+  "softclose.config.keybind.stop.tooltip": "Клавиша, нажимаемая отдельно для остановки цикла. По умолчанию: END.",
+  "softclose.config.keybind.config": "Клавиша открытия настроек",
+  "softclose.config.keybind.config.tooltip": "Клавиша, нажимаемая вместе с Alt для открытия этого экрана настроек. По умолчанию: F8 (Alt+F8).",
+  "softclose.config.keybind.available": "§7Доступные клавиши: %s",
   "softclose.config.category.slots": "Подбор предметов",
   "softclose.config.category.blockclick": "Режим клика по блоку",
-
   "softclose.config.auto_cycle": "Авто-цикл",
   "softclose.config.auto_cycle.tooltip": "Выполнять полный цикл без ручного подтверждения",
   "softclose.config.cycle_delay": "Задержка цикла (мс)",
@@ -20,12 +28,13 @@
   "softclose.config.block_click_mode": "Режим клика по блоку",
   "softclose.config.block_click_mode.tooltip1": "Открывать GUI кликом по блоку вместо команды.",
   "softclose.config.block_click_mode.tooltip2": "Включите и настройте блок во вкладке \"Режим клика по блоку\".",
-
+  "softclose.config.drop_if_full": "Выбрасывать предметы при полном инвентаре",
+  "softclose.config.drop_if_full.tooltip1": "При подборе предметов, если инвентарь полон,",
+  "softclose.config.drop_if_full.tooltip2": "предметы будут выброшены из контейнера в мир вместо того чтобы их пропустить.",
   "softclose.config.gui_open_command": "Команда открытия GUI",
   "softclose.config.gui_open_command.tooltip": "Команда для открытия GUI контейнера (Шаг 1)",
   "softclose.config.active_profile": "Активный профиль команд",
   "softclose.config.active_profile.tooltip": "Название активного профиля команд (точно как в profiles.json)",
-
   "softclose.config.target_block_set": "Блок выбран",
   "softclose.config.target_block_set.tooltip1": "Показывает, выбран ли целевой блок.",
   "softclose.config.target_block_set.tooltip2": "Снимите галочку чтобы сбросить сохранённый блок.",
@@ -38,45 +47,36 @@
   "softclose.config.target_block_dim": "Измерение целевого блока",
   "softclose.config.target_block_dim.tooltip": "Измерение (minecraft:overworld, minecraft:the_nether и т.д.)",
   "softclose.config.block_click_hint": "§eКак выбрать блок: §fВыйдите из настроек и нажмите ПКМ по нужному блоку. Мод автоматически сохранит координаты при следующем запуске цикла (Alt+F7).",
-
   "softclose.config.pickup_slots": "Слоты подбора",
   "softclose.config.pickup_slots.tooltip": "Слоты через запятую или диапазоны, напр. 0-8,27-35",
-
   "softclose.screen.profiles.title": "Профили команд",
   "softclose.screen.profiles.manage": "⚙ Управление профилями команд",
   "softclose.screen.profiles.current": "Профиль: %s",
   "softclose.screen.profiles.none": "(нет профилей)",
-
   "softclose.screen.profiles.field.name": "Название профиля:",
   "softclose.screen.profiles.field.on_open": "Команда при открытии:",
   "softclose.screen.profiles.field.after_pickup": "Команда после забора:",
   "softclose.screen.profiles.field.before_close": "Команда перед закрытием:",
-
   "softclose.screen.profiles.placeholder.name": "Название профиля",
   "softclose.screen.profiles.placeholder.on_open": "Команда при открытии",
   "softclose.screen.profiles.placeholder.after_pickup": "Команда после забора",
   "softclose.screen.profiles.placeholder.before_close": "Команда перед закрытием",
-
   "softclose.screen.profiles.btn.save": "💾 Сохранить",
   "softclose.screen.profiles.btn.new": "➕ Новый",
   "softclose.screen.profiles.btn.delete": "🗑 Удалить",
   "softclose.screen.profiles.btn.back": "← Назад",
-
   "softclose.screen.profiles.status.saved": "✔ Профиль сохранён!",
   "softclose.screen.profiles.status.created": "Новый профиль создан",
   "softclose.screen.profiles.status.deleted": "Профиль удалён",
-
   "softclose.cycle.step1.hint": "Нажмите ПКМ по контейнеру для начала...",
   "softclose.cycle.step1.no_block": "§c[SoftClose] §fЦелевой блок не выбран! Настройте его в настройках мода.",
   "softclose.cycle.step2.message": "Положите предметы в контейнер",
   "softclose.cycle.step2.button": "Готово",
   "softclose.cycle.step4.message": "Заберите предметы из контейнера",
   "softclose.cycle.step4.button": "Забрал",
-
   "softclose.hud.already_running": "Уже запущено",
   "softclose.hud.block_mode_on": "Режим клика по блоку: §aВКЛ",
   "softclose.hud.block_mode_off": "Режим клика по блоку: §cВЫКЛ",
-
   "softclose.hud.state.opening_gui": "Открытие GUI...",
   "softclose.hud.state.waiting_items": "Ожидание предметов",
   "softclose.hud.state.closing": "Закрытие контейнера",

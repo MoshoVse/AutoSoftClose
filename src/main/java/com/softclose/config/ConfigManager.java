@@ -136,6 +136,11 @@ public class ConfigManager {
         public int targetBlockZ = 0;
         public String targetBlockDimension = "minecraft:overworld";
         public boolean targetBlockSet = false;
+        public boolean dropIfFull = false;
+        // Keybinds — stored as GLFW key codes
+        public int keybindStart  = 296; // GLFW_KEY_F7
+        public int keybindStop   = 269; // GLFW_KEY_END
+        public int keybindConfig = 297; // GLFW_KEY_F8
     }
 
     public static class CommandProfile {

@@ -1,16 +1,24 @@
 {
+  "key.softclose.open_config": "Open SoftClose Config",
   "key.softclose.start": "Start SoftClose Cycle",
   "key.softclose.stop": "Stop SoftClose Cycle",
   "key.softclose.select_block": "Select Target Block",
   "key.softclose.toggle_block_mode": "Toggle Block-Click Mode",
   "category.softclose": "SoftClose",
-
   "softclose.config.title": "SoftClose Configuration",
   "softclose.config.category.general": "General",
   "softclose.config.category.commands": "Commands",
+  "softclose.config.category.keybinds": "Hotkeys",
+  "softclose.config.keybinds.hint": "§eEnter a key name, e.g. F7, END, G, KP_1. All hotkeys require Alt to be held (except Stop).",
+  "softclose.config.keybind.start": "Start Cycle Key",
+  "softclose.config.keybind.start.tooltip": "Key pressed together with Alt to start the cycle. Default: F7 (Alt+F7).",
+  "softclose.config.keybind.stop": "Stop Cycle Key",
+  "softclose.config.keybind.stop.tooltip": "Key pressed alone to stop the cycle. Default: END.",
+  "softclose.config.keybind.config": "Open Config Key",
+  "softclose.config.keybind.config.tooltip": "Key pressed together with Alt to open this settings screen. Default: F8 (Alt+F8).",
+  "softclose.config.keybind.available": "§7Available keys: %s",
   "softclose.config.category.slots": "Slot Pickup",
   "softclose.config.category.blockclick": "Block Click Mode",
-
   "softclose.config.auto_cycle": "Auto Cycle",
   "softclose.config.auto_cycle.tooltip": "Run the full cycle without manual confirmation",
   "softclose.config.cycle_delay": "Cycle Delay (ms)",
@@ -20,12 +28,13 @@
   "softclose.config.block_click_mode": "Block Click Mode",
   "softclose.config.block_click_mode.tooltip1": "Open the GUI by right-clicking a block instead of a command.",
   "softclose.config.block_click_mode.tooltip2": "Enable and configure the block in the 'Block Click Mode' tab.",
-
+  "softclose.config.drop_if_full": "Drop Items if Inventory Full",
+  "softclose.config.drop_if_full.tooltip1": "When picking up items, if your inventory is full,",
+  "softclose.config.drop_if_full.tooltip2": "items will be thrown out of the container into the world instead of being skipped.",
   "softclose.config.gui_open_command": "GUI Open Command",
   "softclose.config.gui_open_command.tooltip": "Command to open the container GUI (Step 1)",
   "softclose.config.active_profile": "Active Command Profile",
   "softclose.config.active_profile.tooltip": "Name of the active command profile (must match exactly as in profiles.json)",
-
   "softclose.config.target_block_set": "Target Block Set",
   "softclose.config.target_block_set.tooltip1": "Shows whether a target block is selected.",
   "softclose.config.target_block_set.tooltip2": "Uncheck to clear the saved block.",
@@ -38,45 +47,36 @@
   "softclose.config.target_block_dim": "Target Block Dimension",
   "softclose.config.target_block_dim.tooltip": "Dimension (minecraft:overworld, minecraft:the_nether, etc.)",
   "softclose.config.block_click_hint": "§eHow to select a block: §fExit settings and right-click the desired block. The mod will automatically save its coordinates on the next cycle start (Alt+F7).",
-
   "softclose.config.pickup_slots": "Pickup Slots",
   "softclose.config.pickup_slots.tooltip": "Comma-separated slots or ranges, e.g. 0-8,27-35",
-
   "softclose.screen.profiles.title": "Command Profiles",
   "softclose.screen.profiles.manage": "⚙ Manage Command Profiles",
   "softclose.screen.profiles.current": "Profile: %s",
   "softclose.screen.profiles.none": "(no profiles)",
-
   "softclose.screen.profiles.field.name": "Profile Name:",
   "softclose.screen.profiles.field.on_open": "On-Open Command:",
   "softclose.screen.profiles.field.after_pickup": "After-Pickup Command:",
   "softclose.screen.profiles.field.before_close": "Before-Close Command:",
-
   "softclose.screen.profiles.placeholder.name": "Profile Name",
   "softclose.screen.profiles.placeholder.on_open": "On Open Command",
   "softclose.screen.profiles.placeholder.after_pickup": "After Pickup Command",
   "softclose.screen.profiles.placeholder.before_close": "Before Close Command",
-
   "softclose.screen.profiles.btn.save": "💾 Save",
   "softclose.screen.profiles.btn.new": "➕ New",
   "softclose.screen.profiles.btn.delete": "🗑 Delete",
   "softclose.screen.profiles.btn.back": "← Back",
-
   "softclose.screen.profiles.status.saved": "✔ Profile saved!",
   "softclose.screen.profiles.status.created": "New profile created",
   "softclose.screen.profiles.status.deleted": "Profile deleted",
-
   "softclose.cycle.step1.hint": "Right-click the container to start...",
   "softclose.cycle.step1.no_block": "§c[SoftClose] §fNo target block set! Configure it in mod settings.",
   "softclose.cycle.step2.message": "Place items in the container",
   "softclose.cycle.step2.button": "Done",
   "softclose.cycle.step4.message": "Pick up items from the container",
   "softclose.cycle.step4.button": "Picked up",
-
   "softclose.hud.already_running": "Already running",
   "softclose.hud.block_mode_on": "Block-click mode: §aON",
   "softclose.hud.block_mode_off": "Block-click mode: §cOFF",
-
   "softclose.hud.state.opening_gui": "Opening GUI...",
   "softclose.hud.state.waiting_items": "Waiting for items",
   "softclose.hud.state.closing": "Closing container",

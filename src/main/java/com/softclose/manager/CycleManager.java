@@ -6,6 +6,8 @@ import com.softclose.config.ConfigManager;
 import com.softclose.screen.SoftCloseScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -84,10 +86,6 @@ public class CycleManager {
 
     // ── Steps ───────────────────────────────────────────────────────────────
 
-    /**
-     * Step 1 — open GUI via command OR simulate right-click on saved block.
-     * Both modes are fully automatic — no player action required.
-     */
     private void handleStep1() {
         if (!running) return;
         transitionTo(CycleState.OPENING_GUI);
@@ -102,15 +100,13 @@ public class CycleManager {
         awaitingScreenOpen = true;
 
         if (cfg.blockClickMode) {
-            // Block-click mode: simulate right-click automatically
             if (!cfg.targetBlockSet) {
                 SoftCloseMod.LOGGER.warn("[SoftClose] Block click mode ON but no target block set!");
                 scheduleOnMain(() -> {
                     MinecraftClient mc = MinecraftClient.getInstance();
                     if (mc.player != null) {
                         mc.player.sendMessage(
-                                Text.translatable("softclose.cycle.step1.no_block"),
-                                true);
+                                Text.translatable("softclose.cycle.step1.no_block"), true);
                     }
                 });
                 running = false;
@@ -121,14 +117,12 @@ public class CycleManager {
             SoftCloseMod.LOGGER.info("[SoftClose] Step 1: block-click mode — simulating right-click");
             scheduleOnMain(() -> SoftCloseMod.getInstance().getBlockClickManager().interactWithTargetBlock());
         } else {
-            // Command mode
             String cmd = cfg.guiOpenCommand;
             SoftCloseMod.LOGGER.info("[SoftClose] Step 1: opening via command '{}'", cmd);
             scheduleOnMain(() -> commandHandler.sendCommand(cmd));
         }
     }
 
-    /** Open GUI for subsequent steps (reopen after close) — always automatic */
     private void reopenGui() {
         ConfigManager.SoftCloseConfig cfg = configManager.getConfig();
         awaitingScreenOpen = true;
@@ -140,7 +134,6 @@ public class CycleManager {
         }
     }
 
-    /** Step 2 — wait for items or show confirm overlay */
     private void handleStep2(HandledScreen<?> screen) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (!running) return;
@@ -149,7 +142,9 @@ public class CycleManager {
         if (configManager.getConfig().manualConfirm) {
             SoftCloseMod.LOGGER.info("[SoftClose] Step 2: showing manual confirm");
             scheduleOnMain(() -> mc.setScreen(
-                    new SoftCloseScreen(Text.translatable("softclose.cycle.step2.message").getString(), Text.translatable("softclose.cycle.step2.button").getString(),
+                    new SoftCloseScreen(
+                            Text.translatable("softclose.cycle.step2.message").getString(),
+                            Text.translatable("softclose.cycle.step2.button").getString(),
                             screen, this::onItemsPlacedConfirmed)));
         } else {
             SoftCloseMod.LOGGER.info("[SoftClose] Step 2: auto — moving items from inventory to container");
@@ -172,7 +167,6 @@ public class CycleManager {
         scheduleDelayed(this::handleStep3, configManager.getConfig().cycleDelayMs);
     }
 
-    /** Step 3 — C2S close + reopen */
     private void handleStep3() {
         if (!running) return;
         transitionTo(CycleState.CLOSING_WITH_PACKET);
@@ -191,7 +185,6 @@ public class CycleManager {
         });
     }
 
-    /** Step 4 — pick up configured slots */
     private void handleStep4(HandledScreen<?> screen) {
         if (!running) return;
         transitionTo(CycleState.PICKING_UP);
@@ -214,6 +207,13 @@ public class CycleManager {
             if (idx < 0 || idx >= screen.getScreenHandler().slots.size()) continue;
             Slot slot = screen.getScreenHandler().slots.get(idx);
             if (!slot.hasStack()) continue;
+
+            // Drop if full and option enabled
+            if (configManager.getConfig().dropIfFull && isInventoryFull(mc)) {
+                dropSlotItem(mc, screen, slot);
+                continue;
+            }
+
             mc.interactionManager.clickSlot(
                     screen.getScreenHandler().syncId,
                     slot.id, 0, SlotActionType.QUICK_MOVE, mc.player);
@@ -227,7 +227,6 @@ public class CycleManager {
         scheduleDelayed(() -> handleStep5(screen), configManager.getConfig().cycleDelayMs);
     }
 
-    /** Step 5 — soft close (no packet), reopen, grab rest */
     private void handleStep5(HandledScreen<?> screen) {
         if (!running) return;
         transitionTo(CycleState.SOFT_CLOSING);
@@ -249,7 +248,6 @@ public class CycleManager {
         });
     }
 
-    /** Step 5 continued — grab remaining items from container slots only */
     private void handleStep5Rest(HandledScreen<?> screen) {
         if (!running) return;
         transitionTo(CycleState.PICKING_REST);
@@ -264,6 +262,13 @@ public class CycleManager {
                 Slot slot = screen.getScreenHandler().slots.get(idx);
                 if (!slot.hasStack()) continue;
                 if (slot.inventory == mc.player.getInventory()) continue;
+
+                // Drop if full and option enabled
+                if (configManager.getConfig().dropIfFull && isInventoryFull(mc)) {
+                    dropSlotItem(mc, screen, slot);
+                    continue;
+                }
+
                 mc.interactionManager.clickSlot(
                         screen.getScreenHandler().syncId,
                         slot.id, 0, SlotActionType.QUICK_MOVE, mc.player);
@@ -272,7 +277,6 @@ public class CycleManager {
         });
     }
 
-    /** Step 6 — hard close, loop */
     private void handleStep6(HandledScreen<?> screen) {
         if (!running) return;
         transitionTo(CycleState.FINAL_CLOSE);
@@ -297,7 +301,40 @@ public class CycleManager {
         });
     }
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
+    // ── Inventory helpers ───────────────────────────────────────────────────
+
+    /**
+     * Returns true if the player's main inventory (slots 0–35) has no empty slot
+     * and no stack that can accept more items of the same type.
+     * Hotbar (0–8) and main inventory (9–35) are both checked.
+     */
+    private boolean isInventoryFull(MinecraftClient mc) {
+        if (mc.player == null) return false;
+        PlayerInventory inv = mc.player.getInventory();
+        // Check all 36 player slots (main + hotbar)
+        for (int i = 0; i < 36; i++) {
+            ItemStack stack = inv.getStack(i);
+            if (stack.isEmpty()) return false;
+            if (stack.getCount() < stack.getMaxCount()) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Drops an item from a container slot using button=1 (throw) with THROW action.
+     * This ejects the item from the container GUI into the world.
+     */
+    private void dropSlotItem(MinecraftClient mc, HandledScreen<?> screen, Slot slot) {
+        if (mc.player == null) return;
+        SoftCloseMod.LOGGER.info("[SoftClose] Inventory full — dropping slot {} ({})",
+                slot.id, slot.getStack().getItem());
+        // button 1 = drop whole stack from slot
+        mc.interactionManager.clickSlot(
+                screen.getScreenHandler().syncId,
+                slot.id, 1, SlotActionType.THROW, mc.player);
+    }
+
+    // ── Misc helpers ────────────────────────────────────────────────────────
 
     private void sendClosePacket(MinecraftClient mc) {
         if (mc.player != null && mc.player.currentScreenHandler != null) {
